@@ -5,9 +5,12 @@ class BasicPlayer:
 		
 	def add_card(self, a):
 		self.cards.append(a)
+		self.card_sorter()
 		
 	def add_cards(self, a):
 		self.cards.extend(a)
+		self.card_sorter()
+		
 
 	def get_card(self, a):
 		return self.cards.pop(a)
@@ -36,3 +39,12 @@ class BasicPlayer:
 		
 	def get_user_name(self):
 		return self.name
+		
+	def card_sorter(self):
+		for i in range(len(self.cards)-1):
+			for j in range(len(self.cards)-1):
+				if self.cards[j].value > self.cards[j+1].value:
+					a = self.cards[j+1].value
+					self.cards[j+1].value = self.cards[j].value
+					self.cards[j].value = a
+	
