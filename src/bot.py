@@ -20,12 +20,13 @@ class Bot(BasicPlayer):
 			self.trump=self.remember_trump(message)
 		if message.startswith("Cards on table ["):
 			self.cards_on_table=self.remember_cards_on_table(message)
+			
 		if message.startswith("--------Attack--------"):
 			self.attack()
 		if message.startswith("--------Defend--------"):
 			self.defend()
 		if message.startswith("--------Podbros--------"):
-			self.podbros()
+			self.attack()
 	
 	def remember_trump(self, trump):
 		cards = [[int(i[0]), i[1]] for i in self.pattern_card.findall(trump)]
@@ -47,7 +48,7 @@ class Bot(BasicPlayer):
 		b=0
 		trumps=0
 		for l in self.cards:
-			if l.suit != self.trump:#[1]:
+			if l.suit != self.trump:
 				trumps=trumps+1
 		if trumps == len(self.cards):	
 			a = self.cards[0]
@@ -64,7 +65,7 @@ class Bot(BasicPlayer):
 				if a.value>i.value and i.suit != self.trump[1]:
 					a=i
 		a = self.cards.index(a)
-		return a	
+		return a+1
 	
 	def my_lowest_card_to_podkinut(self):
 		self.cards_on_table.sort()
@@ -81,6 +82,7 @@ class Bot(BasicPlayer):
 		return "end"
 			
 	def my_lowest_card_to_otbit(self):
+		print(self.cards_on_table)
 		possible_cards=[]
 		suit = self.cards_on_table[-1][1]
 		value = self.cards_on_table[-1][0]
@@ -104,8 +106,13 @@ class Bot(BasicPlayer):
 			print(self.command)
 		else:
 			self.command.append(self.my_lowest_card_to_podkinut())
+			if self.command[0] != "end":
+				self.command.append("put")
+				
+	def defend(self):
+		self.command.append(self.my_lowest_card_to_otbit())
+		if self.command[0] != "put":
 			self.command.append("put")
-		
 		
 	def razdacha(self):
 		for i in range(10):
@@ -113,9 +120,9 @@ class Bot(BasicPlayer):
 			
 b=Bot()
 b.razdacha()
-b.send_msg("--------Attack--------")
-b.send_msg("Cards on table []")
+b.send_msg("--------Defend--------")
+b.send_msg("Cards on table [[6 Bubna], [7 Cherva], [8 Krest], [9 Krest], [9 Cherva], [12 Bubna]]")
 # b.send_msg("Cards on hends: [[6 Krest], [7 Bubna], [9 Bubna], [10 Bubna], [12 Pika], [12 Pika]]")
-print(b.attack())
+#print(b.attack())
 
 		
