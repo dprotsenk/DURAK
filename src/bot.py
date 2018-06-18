@@ -10,18 +10,22 @@ class Bot(BasicPlayer):
 		self.pattern_card=re.compile(r'\[(\d+) ([a-zA-Z]+)\]')
 		self.deck=Card_deck()
 		self.cards=[]
+		self.command=[]
+		
+	def get_command(init):
+		return self.command.pop()
 		
 	def send_msg(self, message):
+		if message.startswith("Trump is"):
+			self.trump=self.remember_trump(message)
+		if message.startswith("Cards on table ["):
+			self.cards_on_table=self.remember_cards_on_table(message)
 		if message.startswith("--------Attack--------"):
 			self.attack()
 		if message.startswith("--------Defend--------"):
 			self.defend()
 		if message.startswith("--------Podbros--------"):
 			self.podbros()
-		if message.startswith("Trump is"):
-			self.trump=self.remember_trump(message)
-		if message.startswith("Cards on table ["):
-			self.cards_on_table=self.remember_cards_on_table(message)
 	
 	def remember_trump(self, trump):
 		cards = [[int(i[0]), i[1]] for i in self.pattern_card.findall(trump)]
@@ -92,15 +96,19 @@ class Bot(BasicPlayer):
 					return j
 		return "get"
 		
+	def attack(self):
+		self.command.append(my_lowest_card_to_podkinut())
+		self.command.append("put")
+		
 	def razdacha(self):
 		for i in range(10):
 			self.cards.append(self.deck.get_card())
 			
 b=Bot()
 b.razdacha()
-b.send_msg("Trump is [8 Bubna]")
-b.send_msg("Cards on table [[6 Bubna], [7 Cherva], [8 Krest], [9 Krest], [9 Cherva], [12 Bubna]]")
+b.send_msg("--------Attack--------")
+b.send_msg("Cards on table []")
 # b.send_msg("Cards on hends: [[6 Krest], [7 Bubna], [9 Bubna], [10 Bubna], [12 Pika], [12 Pika]]")
-print(b.my_lowest_card_to_podkinut())
+print(b.attack(self))
 
 		
