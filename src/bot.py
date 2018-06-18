@@ -43,11 +43,11 @@ class Bot(BasicPlayer):
 				a.append(self.cards[i+1])
 		return a
 		
-	def my_lowest_card(self):
+	def my_lowest_card_to_pohodit(self):
 		b=0
 		trumps=0
 		for l in self.cards:
-			if l.suit != self.trump[1]:
+			if l.suit != self.trump:#[1]:
 				trumps=trumps+1
 		if trumps == len(self.cards):	
 			a = self.cards[0]
@@ -64,7 +64,7 @@ class Bot(BasicPlayer):
 				if a.value>i.value and i.suit != self.trump[1]:
 					a=i
 		a = self.cards.index(a)
-		return a
+		return a	
 	
 	def my_lowest_card_to_podkinut(self):
 		self.cards_on_table.sort()
@@ -97,8 +97,15 @@ class Bot(BasicPlayer):
 		return "get"
 		
 	def attack(self):
-		self.command.append(my_lowest_card_to_podkinut())
-		self.command.append("put")
+		if len(self.cards_on_table)==0:
+			self.command.append(self.my_lowest_card_to_pohodit())
+			self.command.append("put")
+			print(self.cards)
+			print(self.command)
+		else:
+			self.command.append(self.my_lowest_card_to_podkinut())
+			self.command.append("put")
+		
 		
 	def razdacha(self):
 		for i in range(10):
@@ -109,6 +116,6 @@ b.razdacha()
 b.send_msg("--------Attack--------")
 b.send_msg("Cards on table []")
 # b.send_msg("Cards on hends: [[6 Krest], [7 Bubna], [9 Bubna], [10 Bubna], [12 Pika], [12 Pika]]")
-print(b.attack(self))
+print(b.attack())
 
 		
