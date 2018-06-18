@@ -1,5 +1,6 @@
 from basicplayer import BasicPlayer
 import re
+from card import Card_deck
 
 class Bot(BasicPlayer):
 	def __init__(self):
@@ -7,14 +8,20 @@ class Bot(BasicPlayer):
 		self.trump=0
 		self.cards_on_table=[]
 		self.pattern_card=re.compile(r'\[(\d+) ([a-zA-Z]+)\]')
+		self.deck=Card_deck()
+		self.cards=[]
 		
 	def send_msg(self, message):
+		if message.startswith("--------Attack--------"):
+			self.attack()
+		if message.startswith("--------Defend--------"):
+			self.defend()
+		if message.startswith("--------Podbros--------"):
+			self.podbros()
 		if message.startswith("Trump is"):
 			self.trump=self.remember_trump(message)
 		if message.startswith("Cards on table ["):
-			self.cards_on_table=self.remember_cards_on_table()
-#		if message.startswith("--------Attack--------"):
-#			self.attack=
+			self.cards_on_table=self.remember_cards_on_table(message)
 	
 	def remember_trump(self, trump):
 		cards = [[int(i[0]), i[1]] for i in self.pattern_card.findall(trump)]
@@ -23,8 +30,7 @@ class Bot(BasicPlayer):
 	def remember_cards_on_table(self, cards_on_table):
 		cards = [[int(i[0]), i[1]] for i in self.pattern_card.findall(cards_on_table)]
 		return cards
-		
-#	def attack(self):
+
 		
 	def unique_values(self):
 		a=[self.cards[0]]
@@ -33,33 +39,68 @@ class Bot(BasicPlayer):
 				a.append(self.cards[i+1])
 		return a
 		
-	def my_lowest_card():
-		t=[]
-		if len(self.cards_on_table) > 0:
-			for i in self.cards_on_table:
-				t.append(i.value)
+	def my_lowest_card(self):
+		b=0
+		trumps=0
+		for l in self.cards:
+			if l.suit != self.trump[1]:
+				trumps=trumps+1
+		if trumps == len(self.cards):	
+			a = self.cards[0]
+			for i in self.cards:
+				if a.value>i.value:
+					a=i
+		else:
+			while True:
+				if self.cards[b].suit != self.trump[1]:
+					a=self.cards[b]
+					break	
+			for i in self.cards:
+				print(i)
+				if a.value>i.value and i.suit != self.trump[1]:
+					a=i
+		a = self.cards.index(a)
+		return a
+	
+	def my_lowest_card_to_podkinut(self):
+		self.cards_on_table.sort()
+		for i in self.cards_on_table:
+			for j in self.cards:
+				if j.value == i[0] and j.suit != self.trump[1]:
+					j = self.cards.index(j)
+					return j
+		for i in self.cards_on_table:
+			for j in self.cards:
+				if j.value == i[0]:
+					j = self.cards.index(j)
+					return j
+		return "end"
+			
+	def my_lowest_card_to_otbit(self):
+		possible_cards=[]
+		suit = self.cards_on_table[-1][1]
+		value = self.cards_on_table[-1][0]
+		for j in self.cards:
+			if j.suit == suit and j.suit != self.trump[1]:
+				if j.value > value:
+					j = self.cards.index(j)
+					return j
+		for j in self.cards:
+			if j.suit == suit:
+				if j.value > value:
+					j = self.cards.index(j)
+					return j
+		return "get"
 		
-		if len(self.cards_on_table) == 0:
-			a=self.cards[0]
-			for i in range(len(self.cards)-1):
-				if a > self.cards[i+1].value and self.cards[i+1].suit != self.trump.suit and a.value in t:
-					a = self.cards[i+1]
-				elif a > self.cards[i+1].value
-					a = self.cards[i+1]
-				return a
-				
-				
-			
-			for j in self.cards_on_table
-				for i in range(len(self.cards)-1):
-					if a in j and a < self.cards[i+1].value:
-						a.append(self.cards[i+1])
-				return a
-			
-			
+	def razdacha(self):
+		for i in range(10):
+			self.cards.append(self.deck.get_card())
 			
 b=Bot()
-
+b.razdacha()
+b.send_msg("Trump is [8 Bubna]")
 b.send_msg("Cards on table [[6 Bubna], [7 Cherva], [8 Krest], [9 Krest], [9 Cherva], [12 Bubna]]")
+# b.send_msg("Cards on hends: [[6 Krest], [7 Bubna], [9 Bubna], [10 Bubna], [12 Pika], [12 Pika]]")
+print(b.my_lowest_card_to_podkinut())
 
 		
