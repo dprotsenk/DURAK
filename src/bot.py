@@ -11,23 +11,39 @@ class Bot(BasicPlayer):
 		self.deck=Card_deck()
 		self.cards=[]
 		self.command=[]
+		self.action_type=0
 		
-	def get_command(init):
+	def get_command(self):
 		return self.command.pop()
 		
 	def send_msg(self, message):
+		print("MESSSAAAAGEEE", message)
 		if message.startswith("Trump is"):
 			self.trump=self.remember_trump(message)
 		if message.startswith("Cards on table"):
 			self.cards_on_table=self.remember_cards_on_table(message)
-			
 		if message.startswith("--------Attack--------"):
 			self.attack()
 		if message.startswith("--------Defend--------"):
 			self.defend()
 		if message.startswith("--------Podbros--------"):
 			self.attack()
-	
+		
+	# def send_msg(self, message):
+		# if message.startswith("Trump is"):
+			# self.trump=self.remember_trump(message)
+		# if message.startswith("Cards on table"):
+			# self.cards_on_table=self.remember_cards_on_table(message)
+			# if self.action_type==self.attack or self.action_type==self.defend:
+				# self.action_type()
+		# if message.startswith("--------Attack--------"):
+			# self.action_type=self.attack
+		# if message.startswith("--------Defend--------"):
+			# self.action_type=self.defend
+		# if message.startswith("--------Podbros--------"):
+			# self.action_type=self.attack
+
+			
 	def remember_trump(self, trump):
 		cards = [[int(i[0]), i[1]] for i in self.pattern_card.findall(trump)]
 		return cards[0]
@@ -82,6 +98,7 @@ class Bot(BasicPlayer):
 		return "end"
 			
 	def my_lowest_card_to_otbit(self):
+		print("self.cards_on_table")
 		print(self.cards_on_table)
 		possible_cards=[]
 		suit = self.cards_on_table[-1][1]
@@ -118,10 +135,10 @@ class Bot(BasicPlayer):
 		for i in range(10):
 			self.cards.append(self.deck.get_card())
 			
-b=Bot()
-b.razdacha()
-b.send_msg("Cards on table [[6 Bubna], [7 Cherva], [8 Krest], [9 Krest], [9 Cherva], [12 Bubna]]")
-b.send_msg("--------Defend--------")
+# b=Bot()
+# b.razdacha()
+# b.send_msg("Cards on table [[6 Bubna], [7 Cherva], [8 Krest], [9 Krest], [9 Cherva], [12 Bubna]]")
+# b.send_msg("--------Defend--------")
 
 # b.send_msg("Cards on hends: [[6 Krest], [7 Bubna], [9 Bubna], [10 Bubna], [12 Pika], [12 Pika]]")
 #print(b.attack())

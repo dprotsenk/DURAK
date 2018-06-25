@@ -1,6 +1,7 @@
 from card import Card_deck
 from player import Player
 from basicplayer import BasicPlayer
+from bot import Bot
 
 class Desk:
 	def __init__(self):
@@ -45,12 +46,13 @@ class Desk:
 			
 	def re_hand_out_cards(self):
 		self.cards_on_table=[]
-		self.players.append(Player())
+		#self.players.append(Player())
+		self.players.append(Bot())
 		self.players.append(Player())
 		self.deck=Card_deck()
 		self.hand_out_cards()
 		print("Trump is {}".format(self.deck.get_trump()))	
-		self.players[0].set_user_name("BOB") ############  NAME SET
+		self.players[0].set_user_name("BOT") ############  NAME SET
 		self.players[1].set_user_name("JOE") ############  NAME SET
 		self.current_player=self.who_first()
 			
@@ -116,6 +118,7 @@ class Desk:
 			
 		
 	def get_current_player(self):
+		# print("current_player!!!!!!!!!!!!!!!!!!!!!", self.current_player)
 		return (self.players[self.current_player])
 		
 	def get_oposit_player(self):
@@ -146,8 +149,9 @@ class Desk:
 		return a
 		
 	def attack(self):
-		self.get_current_player().send_msg("--------Attack--------")
 		self.get_current_player().send_msg("Cards on table {}".format(self.cards_on_table))
+		self.get_current_player().send_msg("--------Attack--------")
+		#self.get_current_player().send_msg("Cards on table {}".format(self.cards_on_table))
 		self.get_current_player().send_msg("Trump is {}".format(self.deck.get_trump()))
 		self.get_current_player().send_msg("Current player is {}".format(self.get_current_player().get_user_name()))
 		self.get_current_player().send_msg("Cards on hends: {}".format(self.get_current_player().get_cards()))
@@ -167,8 +171,8 @@ class Desk:
 			self.counter=1
 		
 	def deffend(self):
-		self.get_current_player().send_msg("--------Defend--------")
 		self.get_current_player().send_msg("Cards on table {}".format(self.cards_on_table))
+		self.get_current_player().send_msg("--------Defend--------")
 		self.get_current_player().send_msg("Trump is {}".format(self.deck.get_trump()))
 		self.get_current_player().send_msg("Current player is {}".format(self.get_current_player().get_user_name()))
 		self.get_current_player().send_msg("Cards on hends: {}".format(self.get_current_player().get_cards()))
@@ -189,10 +193,11 @@ class Desk:
 				
 	def podbros(self):
 		while True:
+			self.get_current_player().send_msg("Cards on table {}".format(self.cards_on_table))
 			self.get_current_player().send_msg("--------Podbros--------")
 			self.get_current_player().send_msg("Player {} doljen podbrosit kartu ili vvesti 'end' dla okonchania podbrose".format(self.get_current_player().get_user_name()))
 			#print("error 5")
-			self.get_current_player().send_msg(self.cards_on_table)
+			#self.get_current_player().send_msg(self.cards_on_table)
 			self.get_current_player().send_msg(self.get_current_player().get_cards())
 			card = self.get_current_player().get_cards()	
 			put = self.get_current_player().get_command()
