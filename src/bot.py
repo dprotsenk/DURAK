@@ -18,7 +18,7 @@ class Bot(BasicPlayer):
 	def send_msg(self, message):
 		if message.startswith("Trump is"):
 			self.trump=self.remember_trump(message)
-		if message.startswith("Cards on table ["):
+		if message.startswith("Cards on table"):
 			self.cards_on_table=self.remember_cards_on_table(message)
 			
 		if message.startswith("--------Attack--------"):
@@ -87,7 +87,7 @@ class Bot(BasicPlayer):
 		suit = self.cards_on_table[-1][1]
 		value = self.cards_on_table[-1][0]
 		for j in self.cards:
-			if j.suit == suit and j.suit != self.trump[1]:
+			if j.suit == suit and j.suit != self.trump:
 				if j.value > value:
 					j = self.cards.index(j)
 					return j
@@ -120,8 +120,9 @@ class Bot(BasicPlayer):
 			
 b=Bot()
 b.razdacha()
-b.send_msg("--------Defend--------")
 b.send_msg("Cards on table [[6 Bubna], [7 Cherva], [8 Krest], [9 Krest], [9 Cherva], [12 Bubna]]")
+b.send_msg("--------Defend--------")
+
 # b.send_msg("Cards on hends: [[6 Krest], [7 Bubna], [9 Bubna], [10 Bubna], [12 Pika], [12 Pika]]")
 #print(b.attack())
 

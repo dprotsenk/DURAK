@@ -11,7 +11,6 @@ class BasicPlayer:
 		self.cards.extend(a)
 		self.card_sorter()
 		
-
 	def get_card(self, a):
 		return self.cards.pop(a)
 	
